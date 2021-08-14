@@ -127,7 +127,7 @@
                 })
             });
             $('#getVehicle').on('click', () => {
-                debug.log('getVehicle clicked');
+                console.log('getVehicle clicked');
                 sendTo(null, 'getVehicles', {
                             authTokenSaved: $('#authToken').val(),
                         }, response => {
