@@ -482,6 +482,30 @@ class TeslaMotors extends utils.Adapter {
             }
             Adapter.sendTo(msg.from, msg.command, {success: true, login: Response, vehicles: Vehicles}, msg.callback);
         }
+        if(msg.command === 'getVehicles'){
+            let authTokenSaved = msg.message.authTokenSaved;
+            let Vehicles = {};
+            Vehicles = await new Promise(async resolve => {
+                let options = {authToken: authTokenSaved};
+                tjs.vehicles(options, (err, vehicles) => {
+                    if(err){
+                        Adapter.log.info('Invalid answer from Vehicle request. Error: ' + err);
+                        resolve({
+                            error: true,
+                            msg: 'Could not get any vehicle'
+                        });
+                        return;
+                    }
+                    Adapter.log.debug('vehicles Answer:' + JSON.stringify(vehicles));
+                    resolve({
+                        error: false,
+                        msg: 'Success',
+                        vehicles: vehicles
+                    });
+                });
+            });
+            Adapter.sendTo(msg.from, msg.command, {success: true, login: Response, vehicles: Vehicles}, msg.callback);
+        }
     }
 
     async GetNewToken(){

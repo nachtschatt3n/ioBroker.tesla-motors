@@ -126,6 +126,21 @@
                     }
                 })
             });
+            $('#getVehicle').on('click', () => {
+                sendTo(null, 'Vehicle', {
+                            authTokenSaved: $('#authToken').val(),
+                        }, response => {
+                            response.vehicles.vehicles.forEach(vehicle => {
+                                let option = $('<option>', {value: vehicle.id_s})
+                                    .text(vehicle.display_name + '(' + vehicle.vin + ')');
+                                $('#vehicle_id_s').append(option);
+                            });
+                            $("#vehicle_id_s").val($("#vehicle_id_s option:first").val());
+                            M.FormSelect.init(document.querySelectorAll('#vehicle_id_s'));
+                        }
+                )}
+            );
+
             $('#useMfa').change(() => {
                 $('#colTeslaMfaPassCode').toggle($('#useMfa').is(":checked"));
                 $('#colSaveCredentials').toggle(!$('#useMfa').is(":checked"));
@@ -234,6 +249,9 @@
         </div>
     </div>
     <div class="row">
+        <div class="col s2">
+            <a id="getVehicle" class="waves-effect waves-light btn"><span class="translate">Get Vehicle</span></a>
+        </div>
         <div class="input-field col s12 m4">
             <select id="vehicle_id_s" class="value">
             </select>
